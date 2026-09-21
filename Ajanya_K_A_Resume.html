@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajanya K A — Resume (AI &amp; Data Science Engineer)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+      --bg: #ffffff;
+      --bg-alt: #f8fafc;
+      --accent: #0ea5e9;
+      --gold: #b45309;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: #0b132b;
+      padding: 30px 15px;
+      line-height: 1.5;
+    }
+
+    .resume-toolbar {
+      max-width: 860px;
+      margin: 0 auto 20px auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-btn, .print-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .print-btn {
+      background: #00f0ff;
+      color: #030712;
+      border: none;
+      box-shadow: 0 4px 20px rgba(0, 240, 255, 0.4);
+    }
+    .print-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 240, 255, 0.6);
+    }
+
+    /* Standard Resume Sheet */
+    .resume-page {
+      max-width: 860px;
+      margin: 0 auto;
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 45px 50px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Header */
+    .resume-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 22px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .name-title-col h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .name-title-col .role-subtitle {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+    }
+
+    .contact-info-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: right;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .contact-info-col a {
+      color: var(--primary-dark);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .contact-info-col a:hover {
+      text-decoration: underline;
+    }
+
+    /* Section Styling */
+    .resume-section {
+      margin-bottom: 24px;
+    }
+
+    .section-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--primary-dark);
+      border-bottom: 1.5px solid var(--border);
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .summary-text {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* Experience & Education Item */
+    .resume-item {
+      margin-bottom: 16px;
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .item-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .item-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text-light);
+      font-weight: 600;
+    }
+
+    .item-company {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .item-bullets {
+      list-style-type: square;
+      padding-left: 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .item-bullets li {
+      margin-bottom: 4px;
+    }
+
+    /* Skills Grid in Resume */
+    .skills-resume-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .skill-resume-cat {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+    }
+
+    .skill-resume-cat-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .skill-resume-cat-items {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Certifications List */
+    .certs-list-compact {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cert-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 8px 12px;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .cert-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .cert-org {
+      font-size: 12px;
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+
+    /* Print Stylesheet */
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+      }
+      .resume-toolbar {
+        display: none !important;
+      }
+      .resume-page {
+        box-shadow: none !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+      @page {
+        margin: 1.5cm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="resume-toolbar">
+    <a href="dashboard.html" class="back-btn">← Back to Dashboard</a>
+    <button class="print-btn" onclick="window.print()">
+      <span>📥 Print / Save as PDF</span>
+    </button>
+  </div>
+
+  <main class="resume-page">
+    <!-- Header -->
+    <header class="resume-header">
+      <div class="name-title-col">
+        <h1>AJANYA K A</h1>
+        <div class="role-subtitle">AI &amp; Machine Learning Engineer</div>
+      </div>
+      <div class="contact-info-col">
+        <div>📧 <a href="mailto:aju.ajanya62@gmail.com">aju.ajanya62@gmail.com</a></div>
+        <div>📞 +91 8089382087</div>
+        <div>📍 Palakkad, Kerala, India</div>
+        <div>🔗 <a href="https://linkedin.com/in/ajanya-k-a-0b9a30330" target="_blank">linkedin.com/in/ajanya-k-a</a></div>
+        <div>💻 <a href="https://github.com/AJANYA-K-A" target="_blank">github.com/AJANYA-K-A</a></div>
+      </div>
+    </header>
+
+    <!-- Summary -->
+    <section class="resume-section">
+      <h2 class="section-heading">Professional Summary</h2>
+      <p class="summary-text">
+        Postgraduate AI &amp; Machine Learning Engineer (M.Sc. AI &amp; Data Science, 9.1 CGPA) with expertise in Deep Learning, NLP Transformers, Computer Vision, and end-to-end Machine Learning deployment. Demonstrated track record building multimodal medical prognosis pipelines, transformer emotion classifiers, IoT-connected real-time vision applications, and predictive analytics models. Experienced in delivering practical AI curriculum and technical mentoring.
+      </p>
+    </section>
+
+    <!-- Education -->
+    <section class="resume-section">
+      <h2 class="section-heading">Education</h2>
+
+      <div class="resume-item">
+        <div class="item-header">
+          <div class="item-title">M.Sc. Artificial Intelligence &amp; Data Science</div>
+          <div class="item-date">2024 – 2026</div>
+        </div>
+        <div class="item-company">Karunya Institute of Technology and Sciences • <strong>CGPA: 9.1 / 10.0</strong></div>
+        <ul class="item-bullets">
+          <li>Specializations: Deep Neural Networks, Transformers NLP, Computer Vision architectures, Predictive Analytics, and High-Performance ML Systems.</li>
+          <li>Academic Distinction: 9.1 CGPA benchmark across postgraduate coursework and research projects.</li>
+        </ul>
+      </div>
+
+      <div class="resume-item">
+        <div class="item-header">
+          <div class="item-title">B.Sc. Physics</div>
+          <div class="item-date">2021 – 2024</div>
+        </div>
+        <div class="item-company">NSS College Ottappalam • <strong>CGPA: 7.15 / 10.0</strong></div>
+        <ul class="item-bullets">
+          <li>Core coursework in Mathematical Modeling, Computational Physics, Differential Equations, Statistical Mechanics, and Quantitative Logic.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section class="resume-section">
+      <h2 class="section-heading">Professional Experience</h2>
+
+      <div class="resume-item">
+        <div class="item-header">
+          <div class="item-title">IT Faculty (Machine Learning &amp; Python)</div>
+          <div class="item-date">Aug 2026 – Present</div>
+        </div>
+        <div class="item-company">Hexanova Tech Solutions, Kochi</div>
+        <ul class="item-bullets">
+          <li>Teaching and mentoring students and engineers in Artificial Intelligence, Machine Learning algorithms, Data Science, and Python programming.</li>
+          <li>Designing and delivering hands-on project curriculum covering model development, cross-validation, and production REST API deployment.</li>
+        </ul>
+      </div>
+
+      <div class="resume-item">
+        <div class="item-header">
+          <div class="item-title">Full Stack Developer Intern</div>
+          <div class="item-date">Dec 2025 – Jun 2026</div>
+        </div>
+        <div class="item-company">TAP Academy</div>
+        <ul class="item-bullets">
+          <li>Developed responsive web applications and scalable backend REST modules connecting AI inference endpoints with relational databases.</li>
+          <li>Collaborated on software engineering workflows, API testing, and state management optimization.</li>
+        </ul>
+      </div>
+
+      <div class="resume-item">
+        <div class="item-header">
+          <div class="item-title">Data Analyst Intern</div>
+          <div class="item-date">Aug 2025 – Sep 2025</div>
+        </div>
+        <div class="item-company">Unified Mentor</div>
+        <ul class="item-bullets">
+          <li>Conducted exploratory data analysis (EDA), automated data cleaning, and statistical transformations on complex multi-attribute datasets.</li>
+          <li>Constructed executive dashboards using Power BI and Tableau for KPI monitoring.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Key Projects -->
+    <section class="resume-section">
+      <h2 class="section-heading">Key Projects</h2>
+
+      <div class="resume-item">
+        <div class="item-header">
+          <div class="item-title">Multimodal Lung Cancer Prognosis</div>
+          <div class="item-date">PyTorch, ResNet50, Autoencoder, Flask</div>
+        </div>
+        <ul class="item-bullets">
+          <li>Developed multimodal ensemble fusing CT scan volumetric features with tabular clinical biomarkers to predict patient survival risk.</li>
+          <li>Implemented Grad-CAM explainability heatmaps for clinical validation and deployed interactive clinician risk-assessment dashboard.</li>
+        </ul>
+      </div>
+
+      <div class="resume-item">
+        <div class="item-header">
+          <div class="item-title">Multi-Label Text Emotion Detection</div>
+          <div class="item-date">RoBERTa, Hugging Face, PyTorch, Streamlit</div>
+        </div>
+        <ul class="item-bullets">
+          <li>Fine-tuned RoBERTa transformer model on multi-label conversational datasets achieving high F1-score across nuanced emotional categories.</li>
+          <li>Built real-time evaluation dashboard with interactive inference confidence scores.</li>
+        </ul>
+      </div>
+
+      <div class="resume-item">
+        <div class="item-header">
+          <div class="item-title">IoT &amp; CV Smart Car Parking System</div>
+          <div class="item-date">OpenCV, Python, Embedded Microcontroller</div>
+        </div>
+        <ul class="item-bullets">
+          <li>Engineered automated real-time parking space detection using spatial video stream processing and contour coordinate mapping.</li>
+          <li>Showcased prototype at <em>Karunya Innovation &amp; Startup Fair 2025</em>.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Technical Skills -->
+    <section class="resume-section">
+      <h2 class="section-heading">Technical Skills</h2>
+      <div class="skills-resume-grid">
+        <div class="skill-resume-cat">
+          <div class="skill-resume-cat-title">AI &amp; Deep Learning</div>
+          <div class="skill-resume-cat-items">PyTorch, RoBERTa Transformers, Scikit-Learn, CNNs, ResNet50, Autoencoders, Grad-CAM</div>
+        </div>
+        <div class="skill-resume-cat">
+          <div class="skill-resume-cat-title">Computer Vision &amp; NLP</div>
+          <div class="skill-resume-cat-items">OpenCV, Image Processing, Hugging Face, TF-IDF, Sentiment Analysis, Spatial Filtering</div>
+        </div>
+        <div class="skill-resume-cat">
+          <div class="skill-resume-cat-title">Languages &amp; Databases</div>
+          <div class="skill-resume-cat-items">Python (NumPy, SciPy, Pandas), SQL, MySQL, REST APIs, Git, GitHub</div>
+        </div>
+        <div class="skill-resume-cat">
+          <div class="skill-resume-cat-title">Analytics &amp; Deployment</div>
+          <div class="skill-resume-cat-items">Power BI, Tableau, Streamlit, Flask, Exploratory Data Analysis (EDA)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certifications -->
+    <section class="resume-section">
+      <h2 class="section-heading">Certifications &amp; Accreditations</h2>
+      <div class="certs-list-compact">
+        <div class="cert-row">
+          <span class="cert-name">Data Analysis and Decision Making I</span>
+          <span class="cert-org">NPTEL Certification</span>
+        </div>
+        <div class="cert-row">
+          <span class="cert-name">Generative AI Overview for Project Managers</span>
+          <span class="cert-org">Project Management Institute (PMI)</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>

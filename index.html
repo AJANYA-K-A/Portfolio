@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AJANYA K A — AI &amp; Machine Learning Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #030712;
+      --bg-surface: #060e20;
+      --bg-card: rgba(6, 14, 30, 0.74);
+      --bg-card-hover: rgba(8, 18, 40, 0.88);
+      --cyan: #00f0ff;
+      --cyan-bright: #38bdf8;
+      --cyan-dim: rgba(0, 240, 255, 0.12);
+      --cyan-glow: rgba(0, 240, 255, 0.45);
+      --amber: #ffaa33;
+      --amber-bright: #ffc266;
+      --amber-dim: rgba(255, 170, 51, 0.12);
+      --amber-glow: rgba(255, 170, 51, 0.4);
+      --gold: #c5a880;
+      --border-cyber: rgba(0, 240, 255, 0.22);
+      --border-cyber-hover: rgba(0, 240, 255, 0.5);
+      --text-primary: #ffffff;
+      --text-secondary: #94a3b8;
+      --text-dim: #64748b;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-tech: 'Space Grotesk', sans-serif;
+      --font-serif: 'Cinzel', serif;
+      --font-display: 'Syne', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* ============================================================
+       BACKGROUND VIDEO CANVAS ENGINE (ALIGNED TO LEFT-MOST SIDE)
+       ============================================================ */
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      z-index: 0;
+      pointer-events: none;
+      object-fit: cover;
+    }
+
+    /* Subtle Natural Atmospheric Gradient: 100% Crystal Clarity over Face, Smooth Readability on Right */
+    .cyber-matrix-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(to right, 
+        rgba(3, 7, 18, 0) 0%, 
+        rgba(3, 7, 18, 0) 36%, 
+        rgba(3, 7, 18, 0.28) 48%, 
+        rgba(3, 7, 18, 0.68) 64%, 
+        rgba(3, 7, 18, 0.88) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ============================================================
+       TOP HUD NAVIGATION DECK
+       ============================================================ */
+    .top-navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(20px, 4vw, 55px);
+      background: rgba(3, 7, 18, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-hex {
+      width: 36px;
+      height: 36px;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid var(--cyan);
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-tech);
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--cyan);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .nav-brand:hover .brand-hex {
+      transform: scale(1.08) rotate(30deg);
+      background: var(--cyan);
+      color: #030712;
+      box-shadow: 0 0 25px var(--cyan-glow);
+    }
+
+    .brand-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-family: var(--font-tech);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--text-primary);
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--cyan);
+      letter-spacing: 0.1em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.25); }
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .nav-enter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid var(--cyan);
+      border-radius: 6px;
+      color: var(--cyan);
+      font-family: var(--font-tech);
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.25);
+    }
+
+    .nav-enter-btn:hover {
+      background: var(--cyan);
+      color: #030712;
+      box-shadow: 0 0 30px var(--cyan-glow);
+      transform: translateY(-1px);
+    }
+
+    /* ============================================================
+       LANDING PORTAL STAGE: PERFECT BALANCED POSITIONING
+       Strictly guarantees text never overlaps the face while sitting centered in the visual lane
+       ============================================================ */
+    .landing-portal-stage {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: clamp(400px, 41vw, 820px);
+      padding-right: clamp(24px, 4vw, 80px);
+      z-index: 10;
+    }
+
+    /* ============================================================
+       MINIMALIST CLEAN TYPOGRAPHY (ZERO RECTANGLES / NO BOXES)
+       Harmonized size, modern Plus Jakarta Sans font, perfectly centered
+       ============================================================ */
+    .landing-hero-content {
+      width: 100%;
+      max-width: clamp(520px, 46vw, 760px);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      z-index: 10;
+    }
+
+    .landing-greeting {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(22px, 2vw, 32px);
+      font-weight: 500;
+      color: #e2e8f0;
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+    }
+
+    .landing-name {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(48px, 5.5vw, 86px);
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+    }
+
+    .landing-name .name-glow {
+      color: #ffffff;
+      text-shadow: 0 0 35px rgba(255, 255, 255, 0.4), 0 0 70px rgba(0, 240, 255, 0.25);
+    }
+
+    .landing-role {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(22px, 2.6vw, 38px);
+      font-weight: 600;
+      color: var(--cyan);
+      letter-spacing: -0.02em;
+      margin-bottom: 26px;
+      line-height: 1.25;
+    }
+
+    .landing-bio {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(16px, 1.3vw, 21px);
+      font-weight: 400;
+      line-height: 1.7;
+      color: #94a3b8;
+      max-width: 660px;
+      margin-bottom: 44px;
+    }
+
+    /* ACTION: VIEW MY WORK WITH ARTISTIC BRUSH UNDERLINE */
+    .landing-action-zone {
+      display: flex;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .landing-cta-link {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-decoration: none;
+      color: #ffffff;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.25s ease;
+    }
+
+    .landing-cta-link:hover {
+      transform: translateY(-3px);
+    }
+
+    .landing-cta-link .cta-text {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(22px, 2.4vw, 32px);
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: color 0.25s ease;
+    }
+
+    .landing-cta-link:hover .cta-text {
+      color: var(--cyan);
+      text-shadow: 0 0 25px rgba(0, 240, 255, 0.7);
+    }
+
+    .landing-cta-link .cta-brush-line {
+      width: clamp(160px, 18vw, 240px);
+      height: 16px;
+      color: #ffffff;
+      margin-top: 4px;
+      transition: color 0.25s ease, filter 0.25s ease;
+    }
+
+    .landing-cta-link:hover .cta-brush-line {
+      color: var(--cyan);
+      filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.8));
+    }
+
+    @media (max-width: 959px) {
+      .landing-portal-stage {
+        justify-content: center;
+        padding: 90px 24px 30px 24px;
+      }
+      .landing-hero-content {
+        max-width: 100%;
+        margin-left: 0;
+      }
+      .cyber-matrix-overlay {
+        background: linear-gradient(to bottom, 
+          rgba(3, 7, 18, 0.35) 0%, 
+          rgba(3, 7, 18, 0.75) 50%, 
+          rgba(3, 7, 18, 0.94) 100%);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FULLSCREEN AUTO-PLAYING CYBER GRID VIDEO CANVAS BACKGROUND (ALIGNED TO LEFT-MOST SIDE) -->
+  <canvas id="bgCanvas"></canvas>
+  <div class="cyber-matrix-overlay"></div>
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="top-navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="brand-hex">AK</div>
+      <div class="brand-info">
+        <span class="brand-name">AJANYA K A</span>
+        <span class="brand-tag">
+          <span class="status-pulse-dot"></span>AI &amp; Data Science Portfolio
+        </span>
+      </div>
+    </a>
+
+    <div class="nav-actions">
+      <a href="dashboard.html" class="nav-enter-btn">
+        <span>Go Inside</span>
+        <span style="font-size: 13px;">→</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       LANDING PORTAL HERO STAGE: "ALMOST CENTRE RIGHT"
+       ============================================================ -->
+  <main class="landing-portal-stage">
+
+    <div class="landing-hero-content">
+      <div class="landing-greeting">Hello</div>
+      <h1 class="landing-name">I am <span class="name-glow">Ajanya K A</span></h1>
+      <h2 class="landing-role">AI &amp; Data Science Professional</h2>
+      <p class="landing-bio">
+        I’m passionate about AI, Machine Learning, Data Science, and Analytics, with a focus on building practical solutions and making complex concepts simple through hands-on learning.
+      </p>
+      <div class="landing-action-zone">
+        <a href="dashboard.html" class="landing-cta-link" id="enterBtn">
+          <span class="cta-text">View My Work</span>
+          <svg class="cta-brush-line" viewBox="0 0 170 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 6.5C40 3.5 95 3 165 5.5M12 10.5C60 8 120 7.5 155 9.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ============================================================
+       AA AI CYBER FACE BACKGROUND VIDEO ENGINE (CONTINUOUS 30 FPS, ALIGNED LEFT)
+       SEAMLESS ARTISTIC EDGE DISSOLVE INTO DEEP SPACE VOID
+       ============================================================ -->
+  <script>
+    (function () {
+      const TOTAL_BG_FRAMES = 300;
+      const BG_FPS = 30;
+      const BG_FRAME_INTERVAL = 1000 / BG_FPS;
+
+      const bgCanvas = document.getElementById('bgCanvas');
+      const ctxBg = bgCanvas.getContext('2d', { alpha: false });
+      const bgImages = [];
+      const bgLoaded = [];
+      let currentBgFrame = 1;
+      let lastBgTime = 0;
+
+      function getBgUrl(i) {
+        return 'aa/ezgif-frame-' + String(i).padStart(3, '0') + '.jpg';
+      }
+
+      function getClosestLoaded(arr, total, target) {
+        if (arr[target]) return target;
+        let best = -1, min = Infinity;
+        for (let i = 1; i <= total; i++) {
+          if (arr[i]) {
+            const d = Math.abs(i - target);
+            if (d < min) { min = d; best = i; }
+          }
+        }
+        return best;
+      }
+
+      function renderBgFrame(frameIndex) {
+        const cw = bgCanvas.width;
+        const ch = bgCanvas.height;
+        if (!cw || !ch) return;
+
+        // 1. Deep space canvas foundation
+        ctxBg.fillStyle = '#030712';
+        ctxBg.fillRect(0, 0, cw, ch);
+
+        const best = getClosestLoaded(bgLoaded, TOTAL_BG_FRAMES, frameIndex);
+        const img = best !== -1 ? bgImages[best] : null;
+        if (!img) return;
+
+        const iw = img.naturalWidth || 720;
+        const ih = img.naturalHeight || 1280;
+
+        // Fit height on landscape desktop, cover on portrait mobile
+        let scale;
+        if (cw / ch < iw / ih) {
+          scale = Math.max(cw / iw, ch / ih);
+        } else {
+          scale = ch / ih;
+        }
+
+        const nw = iw * scale;
+        const nh = ih * scale;
+
+        // ALIGNED STRICTLY TO THE LEFT-MOST SIDE
+        const x = 0;
+        const y = (ch - nh) / 2;
+
+        ctxBg.drawImage(img, x, y, nw, nh);
+
+        // SEAMLESS INVISIBLE ARTISTIC DISSOLVE
+        // Dissolves from 72% of width to nw so there is NEVER a vertical seam or cut-off
+        if (cw > nw * 0.72) {
+          const fadeStart = nw * 0.72;
+          const fadeEnd = nw;
+          const grad = ctxBg.createLinearGradient(fadeStart, 0, fadeEnd, 0);
+          grad.addColorStop(0, 'rgba(3, 7, 18, 0)');
+          grad.addColorStop(0.35, 'rgba(3, 7, 18, 0.28)');
+          grad.addColorStop(0.7, 'rgba(3, 7, 18, 0.75)');
+          grad.addColorStop(1, 'rgba(3, 7, 18, 1)');
+          ctxBg.fillStyle = grad;
+          ctxBg.fillRect(fadeStart, 0, fadeEnd - fadeStart + 2, ch);
+
+          // Fill entire remainder of canvas with solid #030712
+          ctxBg.fillStyle = '#030712';
+          ctxBg.fillRect(fadeEnd, 0, cw - fadeEnd + 2, ch);
+        }
+      }
+
+      function loadBg(i) {
+        if (bgLoaded[i] || bgImages[i]) return;
+        const img = new Image();
+        img.onload = () => {
+          bgLoaded[i] = true;
+          if (currentBgFrame === i) renderBgFrame(i);
+        };
+        img.src = getBgUrl(i);
+        bgImages[i] = img;
+      }
+
+      function resizeCanvas() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        bgCanvas.width = Math.round(window.innerWidth * dpr);
+        bgCanvas.height = Math.round(window.innerHeight * dpr);
+        renderBgFrame(currentBgFrame);
+      }
+
+      function animLoop(timestamp) {
+        if (document.visibilityState !== 'hidden') {
+          if (!lastBgTime) lastBgTime = timestamp;
+          const elapsed = timestamp - lastBgTime;
+          if (elapsed >= BG_FRAME_INTERVAL) {
+            currentBgFrame = (currentBgFrame % TOTAL_BG_FRAMES) + 1;
+            renderBgFrame(currentBgFrame);
+            lastBgTime = timestamp - (elapsed % BG_FRAME_INTERVAL);
+          }
+        }
+        requestAnimationFrame(animLoop);
+      }
+
+      // Progressive preloading
+      loadBg(1);
+      for (let i = 1; i <= 35; i++) loadBg(i);
+      for (let i = 40; i <= TOTAL_BG_FRAMES; i += 6) loadBg(i);
+
+      setTimeout(() => {
+        for (let i = 1; i <= TOTAL_BG_FRAMES; i += 2) loadBg(i);
+      }, 100);
+
+      setTimeout(() => {
+        for (let i = 2; i <= TOTAL_BG_FRAMES; i += 2) loadBg(i);
+      }, 250);
+
+      window.addEventListener('resize', resizeCanvas, { passive: true });
+      setTimeout(resizeCanvas, 50);
+      requestAnimationFrame(animLoop);
+    })();
+  </script>
+</body>
+</html>
