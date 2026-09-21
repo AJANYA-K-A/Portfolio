@@ -2051,6 +2051,84 @@
     }
 
     @media (max-width: 768px) {
+      .top-navbar-wrap {
+        padding: 8px 12px;
+      }
+      .top-navbar {
+        height: 52px;
+        padding: 0 12px;
+      }
+      .nav-brand {
+        gap: 8px;
+      }
+      .brand-monogram {
+        width: 32px;
+        height: 32px;
+        font-size: 11px;
+      }
+      .brand-title {
+        font-size: 12.5px;
+        white-space: nowrap;
+      }
+      .brand-tag {
+        display: none;
+      }
+      .nav-menu {
+        display: none;
+      }
+      .nav-back-link {
+        display: none;
+      }
+      .nav-controls {
+        gap: 6px;
+      }
+      .nav-resume-btn {
+        padding: 5px 10px;
+        font-size: 10.5px;
+      }
+      #sfxToggle {
+        padding: 5px 8px;
+        font-size: 10.5px;
+      }
+      .dashboard-header-console {
+        padding: 72px 14px 14px 14px;
+      }
+      .console-hud-pod {
+        padding: 16px 14px;
+        border-radius: 14px;
+        gap: 18px;
+      }
+      .hud-title-zone h1 {
+        font-size: clamp(20px, 5.5vw, 28px);
+      }
+      .hud-tag {
+        font-size: 10px;
+        padding: 3px 8px;
+      }
+      .hud-metric-strip {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+      }
+      .metric-hud-tile {
+        padding: 8px 6px;
+      }
+      .metric-lbl {
+        font-size: 8px;
+      }
+      .metric-val {
+        font-size: 11px;
+      }
+      .dashboard-main-section {
+        padding: 10px 14px 80px 14px;
+      }
+      .dashboard-sticky-stage {
+        height: 400px;
+        margin-bottom: 20px;
+      }
+      .sticky-video-pod {
+        width: min(320px, 88vw);
+        height: 100%;
+      }
       .skills-simple-grid,
       .certs-cards-grid,
       .connect-simple-grid {
@@ -2067,8 +2145,54 @@
       .project-thumb-pod {
         height: 160px;
       }
-      .nav-menu {
-        display: none;
+      .connect-channels-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .channel-actions-row {
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .channel-act-btn {
+        flex: 1 1 calc(50% - 6px);
+        font-size: 11px;
+        padding: 7px 8px;
+        text-align: center;
+        justify-content: center;
+      }
+      .terminal-actions-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+      .dispatch-btn-group {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+      }
+      .dispatch-act-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .top-navbar {
+        padding: 0 8px;
+      }
+      .theme-switcher {
+        gap: 4px;
+      }
+      .theme-dot {
+        width: 14px;
+        height: 14px;
+      }
+      #sfxToggle {
+        padding: 4px 6px;
+      }
+      .hud-metric-strip {
+        grid-template-columns: 1fr;
+        gap: 6px;
       }
     }
   </style>
@@ -2749,10 +2873,13 @@
                   </div>
                 </div>
                 <div class="channel-actions-row">
-                  <a href="mailto:aju.ajanya62@gmail.com?subject=Professional%20Inquiry%20-%20Ajanya%20K%20A" class="channel-act-btn primary" onclick="playBeep(1200, 0.08)">
+                  <a href="mailto:aju.ajanya62@gmail.com?subject=Professional%20Inquiry%20-%20Ajanya%20K%20A" class="channel-act-btn primary" onclick="openMailComposer('Professional Inquiry - Ajanya K A', ''); return false;">
                     <span>Send Email ✉️</span>
                   </a>
-                  <button class="channel-act-btn secondary" onclick="copyContactText('aju.ajanya62@gmail.com', this)">
+                  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=aju.ajanya62@gmail.com&su=Professional%20Inquiry%20-%20Ajanya%20K%20A" target="_blank" rel="noopener" class="channel-act-btn secondary" style="color: #38bdf8;" onclick="playBeep(1200, 0.08)">
+                    <span>Gmail Web ↗</span>
+                  </a>
+                  <button type="button" class="channel-act-btn secondary" onclick="copyContactText('aju.ajanya62@gmail.com', this)">
                     <span>Copy Address 📋</span>
                   </button>
                 </div>
@@ -3014,18 +3141,33 @@
         images[i] = img;
       }
 
-      // Fast progressive preloading: instant first frame + initial sequence
+      // Fast staged preloading: Frame 1 immediately, initial buffer 2..25, then steady pipeline
       loadFrame(1);
-      for (let i = 1; i <= 35; i++) loadFrame(i);
-      for (let i = 40; i <= TOTAL_FRAMES; i += 6) loadFrame(i);
+      for (let i = 2; i <= 25; i++) loadFrame(i);
 
-      setTimeout(() => {
-        for (let i = 1; i <= TOTAL_FRAMES; i += 2) loadFrame(i);
-      }, 120);
+      const bannerQueue = [];
+      for (let i = 26; i <= TOTAL_FRAMES; i++) bannerQueue.push(i);
+      let activeBannerLoads = 0;
+      const MAX_CONCURRENT_BANNER = 4;
 
-      setTimeout(() => {
-        for (let i = 2; i <= TOTAL_FRAMES; i += 2) loadFrame(i);
-      }, 300);
+      function pumpBannerQueue() {
+        while (activeBannerLoads < MAX_CONCURRENT_BANNER && bannerQueue.length > 0) {
+          const nextIdx = bannerQueue.shift();
+          if (loaded[nextIdx] || images[nextIdx]) continue;
+          activeBannerLoads++;
+          const img = new Image();
+          img.onload = img.onerror = () => {
+            loaded[nextIdx] = true;
+            activeBannerLoads--;
+            if (currentFrame === nextIdx) renderFrame(currentFrame);
+            pumpBannerQueue();
+          };
+          img.src = getUrl(nextIdx);
+          images[nextIdx] = img;
+        }
+      }
+
+      setTimeout(pumpBannerQueue, 150);
 
       function animLoop(timestamp) {
         if (document.visibilityState !== 'hidden') {
@@ -3204,13 +3346,50 @@
       };
     }
 
-    function transmitViaMail() {
-      const payload = buildFormattedPayload();
-      if (!payload) return;
+    function openMailComposer(customSubject, customBody) {
       playBeep(1400, 0.1, 'triangle');
-      const mailtoUrl = `mailto:aju.ajanya62@gmail.com?subject=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent(payload.body)}`;
-      window.location.href = mailtoUrl;
-      showToast('Opening email client with your message...');
+      const email = 'aju.ajanya62@gmail.com';
+      const defaultSubject = `[Portfolio Inquiry] ${currentIntent || 'Professional Connection'} - Ajanya K A`;
+      const defaultBody = 'Hello Ajanya,\n\nI reviewed your portfolio and would like to connect regarding an opportunity.\n\nBest regards,';
+      
+      const subject = customSubject || defaultSubject;
+      const body = customBody || defaultBody;
+      
+      const encSub = encodeURIComponent(subject);
+      const encBody = encodeURIComponent(body);
+      
+      // 1. Direct Web Gmail composer - works 100% reliably in any browser without needing a desktop mail client
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encSub}&body=${encBody}`;
+      window.open(gmailUrl, '_blank');
+
+      // 2. Also trigger native mailto: for users with default desktop clients (Outlook, Apple Mail, Thunderbird)
+      try {
+        const mailtoUrl = `mailto:${email}?subject=${encSub}&body=${encBody}`;
+        const a = document.createElement('a');
+        a.href = mailtoUrl;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch (e) {}
+
+      showToast('Opening email to aju.ajanya62@gmail.com...');
+    }
+
+    function transmitViaMail() {
+      const name = document.getElementById('senderName')?.value.trim() || '';
+      const contact = document.getElementById('senderContact')?.value.trim() || '';
+      const typedBody = document.getElementById('messageBody')?.value.trim();
+
+      const subject = name 
+        ? `[Portfolio Inquiry] ${currentIntent} - from ${name}` 
+        : `[Portfolio Inquiry] ${currentIntent} - Ajanya K A`;
+
+      let fullBody = typedBody || 'Hello Ajanya,\n\nI reviewed your portfolio and would like to connect regarding an opportunity.';
+      if (name || contact) {
+        fullBody += `\n\n---\nSender Details:\nName / Organization: ${name || 'Not specified'}\nContact: ${contact || 'Not specified'}\nInquiry Purpose: ${currentIntent}`;
+      }
+
+      openMailComposer(subject, fullBody);
     }
 
     function transmitViaWhatsApp() {
@@ -3358,7 +3537,7 @@
       let targetFrameV2 = 1;
 
       function getV2Url(i) {
-        return 'v2/ezgif-frame-' + String(i).padStart(3, '0') + '.png';
+        return 'v2/ezgif-frame-' + String(i).padStart(3, '0') + '.webp';
       }
 
       function renderStickyFrame(frameIndex) {
@@ -3416,11 +3595,64 @@
         }
       }
 
+      // Adaptive Priority Queue for v2 (prioritizes active scroll position)
+      const v2Queue = [];
+      for (let i = 2; i <= V2_TOTAL_FRAMES; i++) v2Queue.push(i);
+
+      let activeV2Loads = 0;
+      const MAX_CONCURRENT_V2 = 4;
+
+      function pumpV2Queue() {
+        while (activeV2Loads < MAX_CONCURRENT_V2 && v2Queue.length > 0) {
+          const target = Math.round(targetFrameV2);
+          v2Queue.sort((a, b) => Math.abs(a - target) - Math.abs(b - target));
+          const nextIdx = v2Queue.shift();
+          if (loadedV2[nextIdx] || imagesV2[nextIdx]) continue;
+
+          activeV2Loads++;
+          const img = new Image();
+          img.onload = img.onerror = () => {
+            loadedV2[nextIdx] = true;
+            activeV2Loads--;
+            if (Math.round(currentFrameV2) === nextIdx) {
+              renderStickyFrame(nextIdx);
+            }
+            pumpV2Queue();
+          };
+          img.src = getV2Url(nextIdx);
+          imagesV2[nextIdx] = img;
+        }
+      }
+
+      // Background Cyber Face stream queue (frames 21..300)
+      const bgQueue = [];
+      for (let i = 21; i <= TOTAL_BG_FRAMES; i++) bgQueue.push(i);
+      let activeBgLoads = 0;
+      const MAX_CONCURRENT_BG = 3;
+
+      function pumpBgQueue() {
+        while (activeBgLoads < MAX_CONCURRENT_BG && bgQueue.length > 0) {
+          const nextIdx = bgQueue.shift();
+          if (bgLoaded[nextIdx] || bgImages[nextIdx]) continue;
+          activeBgLoads++;
+          const img = new Image();
+          img.onload = img.onerror = () => {
+            bgLoaded[nextIdx] = true;
+            activeBgLoads--;
+            if (currentBgFrame === nextIdx) renderBgFrame(nextIdx);
+            pumpBgQueue();
+          };
+          img.src = getBgUrl(nextIdx);
+          bgImages[nextIdx] = img;
+        }
+      }
+
       function updateScrollTargets() {
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
         if (maxScroll > 0) {
           const ratio = Math.min(Math.max(window.scrollY / maxScroll, 0), 1);
           targetFrameV2 = 1 + ratio * (V2_TOTAL_FRAMES - 1);
+          pumpV2Queue();
         }
       }
 
@@ -3446,27 +3678,24 @@
         requestAnimationFrame(animLoop);
       }
 
-      // Fast preloads for AA background video & V2 sticky video
+      // Fast staged preloads:
+      // Stage 1: Load Frame 1 immediately
       loadBg(1);
       loadV2(1);
 
-      for (let i = 1; i <= 35; i++) {
-        loadBg(i);
-        loadV2(i);
+      // Stage 2: Load skeleton keyframes across the whole scroll range (30 frames = 1.6 MB)
+      for (let k = 11; k <= V2_TOTAL_FRAMES; k += 10) {
+        loadV2(k);
+      }
+      for (let b = 2; b <= 20; b++) {
+        loadBg(b);
       }
 
-      for (let i = 40; i <= TOTAL_BG_FRAMES; i += 6) loadBg(i);
-      for (let i = 40; i <= V2_TOTAL_FRAMES; i += 10) loadV2(i);
-
+      // Stage 3: Start adaptive priority queue
       setTimeout(() => {
-        for (let i = 1; i <= TOTAL_BG_FRAMES; i += 2) loadBg(i);
-        for (let i = 1; i <= V2_TOTAL_FRAMES; i += 2) loadV2(i);
+        pumpV2Queue();
+        pumpBgQueue();
       }, 120);
-
-      setTimeout(() => {
-        for (let i = 2; i <= TOTAL_BG_FRAMES; i += 2) loadBg(i);
-        for (let i = 2; i <= V2_TOTAL_FRAMES; i += 2) loadV2(i);
-      }, 300);
 
       window.addEventListener('scroll', updateScrollTargets, { passive: true });
       window.addEventListener('resize', resizeCanvases, { passive: true });
